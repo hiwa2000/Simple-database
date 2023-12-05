@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dbHelper.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -8,9 +9,12 @@ void main() async {
 
   await dbHelper.deleteDatabase();
 
-  await dbHelper.insertAuthor(const Author(id: 1, name: 'Franz Kafka', age: 40));
-  await dbHelper.insertAuthor(const Author(id: 2, name: 'Hermann Hesse', age: 85));
-  await dbHelper.insertAuthor(const Author(id: 3, name: 'Maxim Gorki', age: 68));
+  await dbHelper
+      .insertAuthor(const Author(id: 1, name: 'Franz Kafka', age: 40));
+  await dbHelper
+      .insertAuthor(const Author(id: 2, name: 'Hermann Hesse', age: 85));
+  await dbHelper
+      .insertAuthor(const Author(id: 3, name: 'Maxim Gorki', age: 68));
 
   runApp(const MyApp());
 }
@@ -55,10 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
             final authors = snapshot.data!;
             return ListView.separated(
               itemCount: authors.length,
-              separatorBuilder: (context, index) => const Divider(color: Colors.black),
+              separatorBuilder: (context, index) =>
+                  const Divider(color: Colors.black),
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('Author: ${authors[index].id}, ${authors[index].name}, ${authors[index].age}'),
+                  title: Text(
+                      'Author: ${authors[index].id}, ${authors[index].name}, ${authors[index].age}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
@@ -75,18 +81,20 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-     floatingActionButton: FloatingActionButton.extended(
-  onPressed: () async {
-    await showDialog(
-      context: context,
-      builder: (context) => AddAuthorDialog(dbHelper: dbHelper),
-    );
-    setState(() {});
-  },
-  label: const Text('Add Author'),
-  icon: const Icon(Icons.add),
-),
-
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: FloatingActionButton.extended(
+          onPressed: () async {
+            await showDialog(
+              context: context,
+              builder: (context) => AddAuthorDialog(dbHelper: dbHelper),
+            );
+            setState(() {});
+          },
+          label: const Text('Add Author'),
+          backgroundColor: const Color.fromARGB(255, 189, 245, 125),
+        ),
+      ),
     );
   }
 
@@ -143,12 +151,12 @@ class _AddAuthorDialogState extends State<AddAuthorDialog> {
               List<Author> existingAuthors = await widget.dbHelper.authors();
               int nextId = existingAuthors.length + 1;
 
-              await widget.dbHelper.insertAuthor(Author(id: nextId, name: name, age: age));
+              await widget.dbHelper
+                  .insertAuthor(Author(id: nextId, name: name, age: age));
               Navigator.pop(context);
             }
           },
           child: const Text('Add Author'),
-          
         ),
       ],
     );
